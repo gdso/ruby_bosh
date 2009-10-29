@@ -4,6 +4,7 @@ require 'rexml/document'
 require 'base64'
 require 'hpricot'
 require 'timeout'
+require 'system_timer' if RUBY_VERSION < '1.9'
 
 class RubyBOSH  
   BOSH_XMLNS    = 'http://jabber.org/protocol/httpbind'
@@ -133,7 +134,7 @@ class RubyBOSH
   end
 
   def deliver(xml)
-    timeout(@timeout) do 
+    (RUBY_VERSION < "1.9" ? Timeout : SystemTimer).timeout(@timeout) do 
       send(xml)
       recv(RestClient.post(@service_url, xml, @headers))
     end
