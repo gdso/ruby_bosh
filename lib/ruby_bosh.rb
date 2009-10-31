@@ -134,7 +134,7 @@ class RubyBOSH
   end
 
   def deliver(xml)
-    (RUBY_VERSION < "1.9" ? Timeout : SystemTimer).timeout(@timeout) do 
+    (RUBY_VERSION < "1.9" ? SystemTimer : Timeout).timeout(@timeout) do 
       send(xml)
       recv(RestClient.post(@service_url, xml, @headers))
     end
