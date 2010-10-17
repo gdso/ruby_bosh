@@ -30,7 +30,7 @@ class RubyBOSH
     @jid, @pw = jid, pw
     @host = jid.split("@").last
     @success = false
-    @timeout = opts[:timeout] || 3 #seconds 
+    @timeout = opts[:timeout] || 8 #seconds 
     @headers = {"Content-Type" => "text/xml; charset=utf-8",
                 "Accept" => "text/xml"}
     @wait    = opts[:wait]   || 5
@@ -134,7 +134,7 @@ class RubyBOSH
   end
 
   def deliver(xml)
-    Timeout.timeout(@timeout) do 
+    ::Timeout.timeout(@timeout) do 
       send(xml)
       recv(RestClient.post(@service_url, xml, @headers))
     end
@@ -158,5 +158,5 @@ end
 
 if __FILE__ == $0
   p RubyBOSH.initialize_session(ARGV[0], ARGV[1], 
-      "http://localhost:5280/http-bind")
+      "http://localhost:7070/http-bind")
 end
