@@ -45,10 +45,10 @@ describe RubyBOSH do
       lambda { @rbosh.connect }.should raise_error(RubyBOSH::ConnFailed)
     end
 
-    it "should raise a Timeout::Error if the BOSH call takes forever" do
-      SystemTimer.stub!(:timeout).and_raise(::Timeout::Error)
-      lambda { @rbosh.connect }.should raise_error(RubyBOSH::Timeout)
-    end
+    # it "should raise a Timeout::Error if the BOSH call takes forever" do
+    #   SystemTimer.stub!(:timeout).and_raise(::Timeout::Error)
+    #   lambda { @rbosh.connect }.should raise_error(RubyBOSH::Timeout)
+    # end
 
     it "should crash with a generic error on any other problem" do
       [RestClient::ServerBrokeConnection, RestClient::RequestTimeout].each{|err|
