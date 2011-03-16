@@ -100,16 +100,18 @@ class RubyBOSH
   end
 
   def request_resource_binding
-    request = construct_body(:sid => @sid) do |body|
-      body.iq(:id => "bind_#{rand(100000)}", :type => "set", 
+      request = construct_body(:sid => @sid) do |body|
+        body.iq(:id => "bind_#{rand(100000)}", :type => "set", 
               :xmlns => "jabber:client") do |iq|
-        iq.bind(:xmlns => BIND_XMLNS) do |bind|
-          bind.resource("bosh_#{rand(10000)}")
-        end
+            # leave contents of <bind> element empty; will result in 
+            # xmpp server assigning a unique resource for the bare JID 
+          iq.bind(:xmlns => BIND_XMLNS)
       end
     end
     
     response = deliver(request)
+    # update jid with the full JID returned by the xmpp server
+    @jid = Hpricot(response).at("jid").inner_html
     response.include?("<jid>") 
   end
 
